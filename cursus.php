@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<title></title>
+</head>
+<body>
+
+
+<!DOCTYPE html>
+<html>
+<head>
   <title>Cursus utt</title>
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="css/style.css">
   <link href="css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  
 </head>
 <body>
   <div class="navbar navbar-inverse navbar-fixed-top">
@@ -37,13 +44,17 @@
     <h1>Dank website</h1>
     <h2>With this dank website you will know if u can graduate</h2>
     <p class="lead">
-    	
 
-<form action="remplissagecursus_lo07.php" method="POST">
+
+
+    	
+<!-- DEBUT DU FORMULAIRE -->
+
+<form action="cible.php" method="POST">
 
 <?php
 
-echo "Information de l'étudiant : " ;
+echo "Remplissage du cursus : " ;
 
 //function pour faire un form avec du texte
 function formtext($liste){
@@ -62,35 +73,52 @@ echo "</select>";
 }
 
 
-$liste = array('numero','nom','prenom','admission','filière','semestre','UV1','UV2','UV3','UV4','UV5','UV6','UV7');
+$numero_semestre = array(1,2,3,4,5,6,7,8);
+formselect($numero_semestre,'numero semestre');
 
-$liste1 = array('numero','nom','prenom');
-formtext($liste1);
+//form pour le label du semestre
+echo " <label>Label Semestre</label> <input type=text name='sem_label' value='ex : ISI1'>";
 
 
-$admission = array('TC','BR');
-formselect($admission,'admission');
-
-$filiere = array('?','MPL','MSI','MRI','LIB.');
-formselect($filiere,'filiere');
+//form pour le nom de l'uv
+echo " <label>Nom UV</label> <input type=text name='nom_uv'>";
 
 
 
+
+
+$categorie = array('CS','TM','EC','ME','CT','NPML','HP');
+formselect($categorie,'categorie');
+
+$affectation = array('TCBR','BR','FCBR');
+formselect($affectation,'affectation');
+
+$presence_utt = array('Oui','Non');
+formselect($presence_utt,'presence a l\'utt');
+
+$credit = array(6,4,0,30);
+formselect($credit,'credit');
+
+$resultat = array('A','B','C','D','E','F','ADM');
+formselect($resultat,'resultat');
 
 
 
 ?>
-
 <input type="submit" value="Valider">
+
 
 </form>
 
-<br>
-Pour remplir le cursus d'un étudiants déjà inscrits, cliquez <a href="cursus.php">ici.</a>
+
 
     </p>
   </div>
   
 </div><!-- /.container -->
+</body>
+</html>
+
+
 </body>
 </html>

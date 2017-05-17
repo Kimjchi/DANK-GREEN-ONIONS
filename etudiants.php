@@ -5,7 +5,6 @@
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="css/style.css">
   <link href="css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  
 </head>
 <body>
   <div class="navbar navbar-inverse navbar-fixed-top">
@@ -35,58 +34,15 @@
   
   <div class="text-center">
     <h1>Dank website</h1>
-    <h2>With this dank website you will know if u can graduate</h2>
+    <h2>Etudiants inscrits</h2>
     <p class="lead">
     	
 
-<form action="remplissagecursus_lo07.php" method="POST">
-
-<?php
-
-echo "Information de l'étudiant : " ;
-
-//function pour faire un form avec du texte
-function formtext($liste){
-foreach ($liste as $key) {
-	echo " <label>".$key."</label> <input type=text name='".$key."'>";
-}
-}
-//function pour faire la liste déroulante
-function formselect($liste,$nomselect){
-	echo " <label>".$nomselect."</label> ";
-	echo "<SELECT name=".$nomselect.">";
-foreach ($liste as $key) {
-	echo "<option name=".$key.">".$key;
-}
-echo "</select>";
-}
-
-
-$liste = array('numero','nom','prenom','admission','filière','semestre','UV1','UV2','UV3','UV4','UV5','UV6','UV7');
-
-$liste1 = array('numero','nom','prenom');
-formtext($liste1);
-
-
-$admission = array('TC','BR');
-formselect($admission,'admission');
-
-$filiere = array('?','MPL','MSI','MRI','LIB.');
-formselect($filiere,'filiere');
+tam
 
 
 
 
-
-
-?>
-
-<input type="submit" value="Valider">
-
-</form>
-
-<br>
-Pour remplir le cursus d'un étudiants déjà inscrits, cliquez <a href="cursus.php">ici.</a>
 
     </p>
   </div>
