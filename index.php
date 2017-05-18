@@ -5,7 +5,8 @@
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="css/style.css">
   <link href="css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="css/bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>
   <div class="navbar navbar-inverse navbar-fixed-top">
