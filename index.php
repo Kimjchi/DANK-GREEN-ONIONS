@@ -24,7 +24,7 @@
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
         <li class="active"><a href="index.php">Home</a></li>
-        <li><a href="etudiants.php">etudiants</a></li>
+        <li><a href="etudiants.php">Etudiants</a></li>
         <li><a href="cursus.php">Cursus</a></li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -63,7 +63,6 @@ echo "</select>";
 }
 
 
-$liste = array('numero','nom','prenom','admission','filière','semestre','UV1','UV2','UV3','UV4','UV5','UV6','UV7');
 
 $liste1 = array('numero','nom','prenom');
 formtext($liste1);
