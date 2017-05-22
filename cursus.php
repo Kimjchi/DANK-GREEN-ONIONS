@@ -52,7 +52,7 @@
     	
 <!-- DEBUT DU FORMULAIRE -->
 
-<form action="cible.php" method="POST">
+<form action="cursus.php" method="POST">
 
 <?php
 
@@ -67,7 +67,7 @@ foreach ($liste as $key) {
 //function pour faire la liste déroulante
 function formselect($liste,$nomselect){
 	echo " <label>".$nomselect."</label> ";
-	echo "<SELECT name=".$nomselect.">";
+	echo "<SELECT name='".$nomselect."'>";
 foreach ($liste as $key) {
 	echo "<option name=".$key.">".$key;
 }
@@ -76,7 +76,7 @@ echo "</select>";
 
 
 $numero_semestre = array(1,2,3,4,5,6,7,8);
-formselect($numero_semestre,'numero semestre');
+formselect($numero_semestre,'numero_semestre');
 
 //form pour le label du semestre
 echo " <label>Label Semestre</label> <input type=text name='sem_label' value='ex : ISI1'>";
@@ -95,8 +95,11 @@ formselect($categorie,'categorie');
 $affectation = array('TCBR','BR','FCBR');
 formselect($affectation,'affectation');
 
+$profil =array('Oui','Non');
+formselect($profil,'profil');
+
 $presence_utt = array('Oui','Non');
-formselect($presence_utt,'presence a l\'utt');
+formselect($presence_utt,'utt');
 
 $credit = array(6,4,0,30);
 formselect($credit,'credit');
@@ -111,6 +114,46 @@ formselect($resultat,'resultat');
 
 
 </form>
+
+
+<?php  
+
+$BDD = new PDO('mysql:host=localhost;dbname=projet lo07', 'root','', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+
+if (isset($_POST['numero_semestre'], $_POST['sem_label'], $_POST['nom_uv'], $_POST['categorie'], $_POST['affectation'], $_POST['utt'], $_POST['profil'], $_POST['credit'], $_POST['resultat'])) {
+	
+
+
+$requete = $BDD->prepare('INSERT INTO `appartient`(`sem_seq`, `sem_label`, `sigle`, `affectation`, `utt`, `profil`, `resultat`)  VALUES (?,?,?,?,?,?,?,)');
+$requete->execute(array($_POST['numero_semestre'], $_POST['sem_label'], $_POST['nom_uv'], $_POST['affectation'], $_POST['utt'], $_POST['profil'], $_POST['resultat']));
+
+}
+
+// test pour savoir si les variables sont toutes présentes
+
+echo "num_semestre : " .$_POST['numero_semestre']. "sem_label : " .$_POST['sem_label']. "nom_uv : ".$_POST['nom_uv']. "categorie : ".$_POST['categorie']. "affectation : ".$_POST['affectation']. "presence utt : " .$_POST['utt']. "profil" .$_POST['profil']. "credit: " .$_POST['credit']. "resultat : " .$_POST['resultat'];
+
+
+$reponse1 = $BDD->query('SELECT * FROM appartient');
+while ($appartient = $reponse1->fetch())
+{
+echo '<p> Semestre n°' . $appartient['sem_seq'] . ' - ' . $appartient['sem_label'] . " UV: " . $appartient['sigle'] . " Affectation: ". $appartient['affectation'] . " - Présence à l\'utt " . $appartient['utt'] . "Profil: " .$_POST['profil']. " </p>";
+
+}
+$reponse1->closeCursor(); // Termine le traitement de la requête
+
+
+
+
+
+
+
+
+
+
+?>
+
+
 
 
 
