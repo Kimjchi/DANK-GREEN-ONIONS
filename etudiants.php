@@ -18,7 +18,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">DANK-GREEN-ONIONS</a>
+      <a class="navbar-brand" href="index.php">DANK-GREEN-ONIONS</a>
     </div>
     
     <div class="collapse navbar-collapse">
@@ -40,9 +40,34 @@
     <p class="lead">
     	
 
-tam
 
 
+<?php
+
+$BDD = new PDO('mysql:host=localhost;dbname=projet lo07', 'root','', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+
+if (isset($_POST['numero'], $_POST['nom'], $_POST['prenom'], $_POST['admission'], $_POST['filiere'])) {
+	
+
+
+$requete = $BDD->prepare('INSERT INTO `etudiant`(`numero`, `nom`, `prenom`, `admission`, `filiere`) VALUES (?,?,?,?,?)');
+$requete->execute(array($_POST['numero'], $_POST['nom'], $_POST['prenom'], $_POST['admission'], $_POST['filiere']));
+
+}
+
+
+
+
+
+$reponse = $BDD->query('SELECT * FROM etudiant');
+while ($etudiant = $reponse->fetch())
+{
+echo '<p>' . $etudiant['numero'] . ' - ' . $etudiant['nom'] . " " . $etudiant['prenom'] . " ". $etudiant['admission'] . ' - ' . $etudiant['filiere'] . '</p>';
+
+}
+$reponse->closeCursor(); // Termine le traitement de la requête
+
+?>
 
 
 
