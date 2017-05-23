@@ -52,7 +52,7 @@ if (isset($_POST['numero'], $_POST['nom'], $_POST['prenom'], $_POST['admission']
 
 $requete = $BDD->prepare('INSERT INTO `etudiant`(`numero`, `nom`, `prenom`, `admission`, `filiere`) VALUES (?,?,?,?,?)');
 $requete->execute(array($_POST['numero'], $_POST['nom'], $_POST['prenom'], $_POST['admission'], $_POST['filiere']));
-
+$requete->closeCursor();
 }
 
 

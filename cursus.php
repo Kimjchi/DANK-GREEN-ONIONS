@@ -1,9 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title></title>
-</head>
-<body>
+
 
 
 <!DOCTYPE html>
@@ -56,13 +51,11 @@
 
 <?php
 
-echo "Remplissage du cursus : " ;
+echo "<h3>Remplissage du cursus :</h3></br> " ;
 
 //function pour faire un form avec du texte
-function formtext($liste){
-foreach ($liste as $key) {
-	echo " <label>".$key."</label> <input type=text name='".$key."'>";
-}
+function formtext($label,$name,$value){
+	echo " <label>".$label."</label> <input type=text name='".$name."' value='".$value."'>";
 }
 //function pour faire la liste déroulante
 function formselect($liste,$nomselect){
@@ -75,76 +68,78 @@ echo "</select>";
 }
 
 
-$numero_semestre = array(1,2,3,4,5,6,7,8);
-formselect($numero_semestre,'numero_semestre');
-
-//form pour le label du semestre
-echo " <label>Label Semestre</label> <input type=text name='sem_label' value='ex : ISI1'>";
-
-
-//form pour le nom de l'uv
-echo " <label>Nom UV</label> <input type=text name='nom_uv'>";
 
 
 
-
-
-$categorie = array('CS','TM','EC','ME','CT','NPML','HP');
-formselect($categorie,'categorie');
-
-$affectation = array('TCBR','BR','FCBR');
-formselect($affectation,'affectation');
-
-$profil =array('Oui','Non');
-formselect($profil,'profil');
-
-$presence_utt = array('Oui','Non');
-formselect($presence_utt,'utt');
-
-$credit = array(6,4,0,30);
-formselect($credit,'credit');
-
-$resultat = array('A','B','C','D','E','F','ADM');
-formselect($resultat,'resultat');
+formtext("Label du cursus","label","");
 
 
 
 ?>
+</br>
+</br>
+<a class="btn btn-primary" href="index.php">Je souhaite créer l'étudiant dans la base de données</a>
+</br></br>
+<button class="btn btn-primary" type="button" data-target="#MonCollapse" data-toggle="collapse" aria-expanded="false" aria-controls="MonCollapse">L'étudiant existe déjà dans la base de données</button>
+ 
+<!-- le contenu masqué -->
+ 
+<section id="MonCollapse" class="collapse">
+<div><?php
+  formtext("Numéro de l'étudiant",'numero',"ex : 38135");
+  ?>
+  </div>
+</section>
+</br></br>
+
 <input type="submit" value="Valider">
 
 
 </form>
+</br>
 
 
 <?php  
 
 $BDD = new PDO('mysql:host=localhost;dbname=projet lo07', 'root','', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 
-if (isset($_POST['numero_semestre'], $_POST['sem_label'], $_POST['nom_uv'], $_POST['categorie'], $_POST['affectation'], $_POST['utt'], $_POST['profil'], $_POST['credit'], $_POST['resultat'])) {
-	
+if (isset($_POST['label'], $_POST['numero'])){
+
+  //On créer le cursus	
+  $requete1 = $BDD->prepare('INSERT INTO `cursus`(`label`, `numero`) VALUES (?,?)');
+  $requete1->execute(array($_POST['label'], $_POST['numero']));
+
+  // test pour savoir si les variables sont toutes présentes
+
+  //echo "num_semestre : " .$_POST['numero_semestre']. "sem_label : " .$_POST['sem_label']. "nom_uv : ".$_POST['nom_uv']. "categorie : ".$_POST['categorie']. "affectation : ".$_POST['affectation']. "presence utt : " .$_POST['utt']. "profil" .$_POST['profil']. "credit: " .$_POST['credit']. "resultat : " .$_POST['resultat'];
 
 
-$requete = $BDD->prepare('INSERT INTO `appartient`(`sem_seq`, `sem_label`, `sigle`, `affectation`, `utt`, `profil`, `resultat`)  VALUES (?,?,?,?,?,?,?,)');
-$requete->execute(array($_POST['numero_semestre'], $_POST['sem_label'], $_POST['nom_uv'], $_POST['affectation'], $_POST['utt'], $_POST['profil'], $_POST['resultat']));
+  //$reponse1 = $BDD->query('SELECT * FROM appartient');
+  //while ($appartient = $reponse1->fetch())
+  //{
+  //echo '<p> Semestre n°' . $appartient['sem_seq'] . ' - ' . $appartient['sem_label'] . " UV: " . $appartient['sigle'] . " Affectation: ". $appartient['affectation'] . " - Présence à l\'utt " . $appartient['utt'] . "Profil: " .$_POST['profil']. " </p>";
+
+  //}
+
+  $requete1->closeCursor();
 
 }
 
-// test pour savoir si les variables sont toutes présentes
+  $reponse = $BDD->query('SELECT * FROM `cursus`');
+  while ($cursus = $reponse->fetch())
+  {
+    echo "<form action='modification_cursus.php' method='POST'> ";
+    echo "<input type='hidden' name='idCursus' value=".$cursus['idCursus'].">";
+    echo "<input type='hidden' name='label' value=".$cursus['label'].">";
+    echo '<input class="btn btn-default" type="submit" value="Label du cursus : ' . $cursus['label'] . " - Numéro de l'étudiant :" . $cursus['numero'] .'">';
+    echo "</form>";
+  }
 
-echo "num_semestre : " .$_POST['numero_semestre']. "sem_label : " .$_POST['sem_label']. "nom_uv : ".$_POST['nom_uv']. "categorie : ".$_POST['categorie']. "affectation : ".$_POST['affectation']. "presence utt : " .$_POST['utt']. "profil" .$_POST['profil']. "credit: " .$_POST['credit']. "resultat : " .$_POST['resultat'];
-
-
-$reponse1 = $BDD->query('SELECT * FROM appartient');
-while ($appartient = $reponse1->fetch())
-{
-echo '<p> Semestre n°' . $appartient['sem_seq'] . ' - ' . $appartient['sem_label'] . " UV: " . $appartient['sigle'] . " Affectation: ". $appartient['affectation'] . " - Présence à l\'utt " . $appartient['utt'] . "Profil: " .$_POST['profil']. " </p>";
-
-}
-$reponse1->closeCursor(); // Termine le traitement de la requête
-
+  $reponse->closeCursor(); // Termine le traitement de la requête
 
 
-
+  
+  
 
 
 
@@ -164,6 +159,3 @@ $reponse1->closeCursor(); // Termine le traitement de la requête
 </body>
 </html>
 
-
-</body>
-</html>
