@@ -58,8 +58,8 @@ function formtext($label,$name,$value){
   echo " <label>".$label."</label> <input type=text name='".$name."' value='".$value."'>";
 }
 //function pour faire la liste déroulante
-function formselect($liste,$nomselect){
-  echo " <label>".$nomselect."</label> ";
+function formselect($liste,$nomselect,$label){
+  echo " <label>".$label."</label> ";
   echo "<SELECT name='".$nomselect."'>";
 foreach ($liste as $key) {
   echo "<option name=".$key.">".$key;['label'];
@@ -69,7 +69,7 @@ echo "</select>";
 
 
 $numero_semestre = array(1,2,3,4,5,6,7,8);
-formselect($numero_semestre,'numero_semestre');
+formselect($numero_semestre,'numero_semestre', 'Numéro du semestre');
 
 //form pour le label du semestre
 formtext("Label semestre", "sem_label","ex : ISI1");
@@ -78,20 +78,32 @@ formtext("Label semestre", "sem_label","ex : ISI1");
 formtext("Semestre", "sem_annee", "P16");
 
 $affectation = array('TCBR','BR','FCBR');
-formselect($affectation,'affectation');
+formselect($affectation,'affectation', 'Affectation');
 
 $profil =array('Oui','Non');
-formselect($profil,'profil');
+formselect($profil,'profil', 'Profil');
 
 $presence_utt = array('Oui','Non');
-formselect($presence_utt,'utt');
+formselect($presence_utt,'utt', 'utt');
 
 $resultat = array('A','B','C','D','E','F','ADM');
-formselect($resultat,'resultat');
+formselect($resultat,'resultat','Résultat');
 
 
 echo "<input type='hidden' name='idCursus' value=".$_POST['idCursus'].">";
 echo "<input type='hidden' name='label' value=".$_POST['label'].">";
+
+$BDD = new PDO('mysql:host=localhost;dbname=projet lo07', 'root','', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+$nom_uv = array();
+$i=0;
+$reponse = $BDD->query('SELECT (`sigle`) FROM `element de formation`');
+while ($uv = $reponse->fetch())
+{
+  $nom_uv[]=$uv[0];
+  $i++;
+}
+
+$reponse->closeCursor();
 
 ?>
 </br>
@@ -101,7 +113,11 @@ echo "<input type='hidden' name='label' value=".$_POST['label'].">";
              <h4 class="panel-title">L'UV existe déjà dans la base de données</h4>
         </div>
         <div id="collapseOne1" class="panel-collapse collapse">
-            <div class="panel-body">...</div>
+            <div class="panel-body">
+              <?php
+                formselect($nom_uv, 'uv_existe', "Nom de l'UV");
+              ?>
+            </div>
         </div>
     </div>
     <div class="panel panel-default">
@@ -114,10 +130,10 @@ echo "<input type='hidden' name='label' value=".$_POST['label'].">";
               formtext("Nom UV", "nom_uv","");
 
               $credit = array(6,4,0,30);
-              formselect($credit,'credit');
+              formselect($credit,'credit', "Crédits");
 
               $categorie = array('CS','TM','EC','ME','CT','NPML','HP');
-              formselect($categorie,'categorie');
+              formselect($categorie,'categorie', "Catégorie");
             ?>
             </div>
         </div>
@@ -132,7 +148,7 @@ echo "<input type='hidden' name='label' value=".$_POST['label'].">";
 
 <?php  
 
-$BDD = new PDO('mysql:host=localhost;dbname=projet lo07', 'root','', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+//$BDD = new PDO('mysql:host=localhost;dbname=projet lo07', 'root','', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 
 if (isset($_POST['numero_semestre'], $_POST['sem_label'], $_POST['nom_uv'], $_POST['categorie'], $_POST['affectation'], $_POST['utt'], $_POST['profil'], $_POST['credit'], $_POST['resultat'])) {
 

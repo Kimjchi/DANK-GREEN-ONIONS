@@ -58,11 +58,11 @@ function formtext($label,$name,$value){
 	echo " <label>".$label."</label> <input type=text name='".$name."' value='".$value."'>";
 }
 //function pour faire la liste déroulante
-function formselect($liste,$nomselect){
-	echo " <label>".$nomselect."</label> ";
-	echo "<SELECT name='".$nomselect."'>";
-foreach ($liste as $key) {
-	echo "<option name=".$key.">".$key;
+function formselect($liste){
+	echo " <label>Etudiant</label> ";
+	echo "<SELECT name='etudiant'>";
+foreach ($liste as $key => $value) {
+	echo "<option value=".$key.">".$value;
 }
 echo "</select>";
 }
@@ -73,7 +73,15 @@ echo "</select>";
 
 formtext("Label du cursus","label","");
 
+$BDD = new PDO('mysql:host=localhost;dbname=projet lo07', 'root','', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+$etu = array();
+$reponse = $BDD->query('SELECT * FROM `etudiant`');
+while ($etudiant = $reponse->fetch())
+{
+  $etu[$etudiant['numero']] = $etudiant['numero'].' - '.$etudiant['nom'].' '.$etudiant['prenom'];
+}
 
+$reponse->closeCursor();
 
 ?>
 </br>
@@ -86,7 +94,7 @@ formtext("Label du cursus","label","");
  
 <section id="MonCollapse" class="collapse">
 <div><?php
-  formtext("Numéro de l'étudiant",'numero',"ex : 38135");
+  formselect($etu);
   ?>
   </div>
 </section>
@@ -101,31 +109,19 @@ formtext("Label du cursus","label","");
 
 <?php  
 
-$BDD = new PDO('mysql:host=localhost;dbname=projet lo07', 'root','', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-
 if (isset($_POST['label'], $_POST['numero'])){
 
   //On créer le cursus	
   $requete1 = $BDD->prepare('INSERT INTO `cursus`(`label`, `numero`) VALUES (?,?)');
   $requete1->execute(array($_POST['label'], $_POST['numero']));
 
-  // test pour savoir si les variables sont toutes présentes
 
-  //echo "num_semestre : " .$_POST['numero_semestre']. "sem_label : " .$_POST['sem_label']. "nom_uv : ".$_POST['nom_uv']. "categorie : ".$_POST['categorie']. "affectation : ".$_POST['affectation']. "presence utt : " .$_POST['utt']. "profil" .$_POST['profil']. "credit: " .$_POST['credit']. "resultat : " .$_POST['resultat'];
-
-
-  //$reponse1 = $BDD->query('SELECT * FROM appartient');
-  //while ($appartient = $reponse1->fetch())
-  //{
-  //echo '<p> Semestre n°' . $appartient['sem_seq'] . ' - ' . $appartient['sem_label'] . " UV: " . $appartient['sigle'] . " Affectation: ". $appartient['affectation'] . " - Présence à l\'utt " . $appartient['utt'] . "Profil: " .$_POST['profil']. " </p>";
-
-  //}
 
   $requete1->closeCursor();
 
 }
 
-  $reponse = $BDD->query('SELECT * FROM `cursus`');
+  $reponse2 = $BDD->query('SELECT * FROM `cursus`');
   while ($cursus = $reponse->fetch())
   {
     echo "<form action='modification_cursus.php' method='POST'> ";
@@ -135,7 +131,7 @@ if (isset($_POST['label'], $_POST['numero'])){
     echo "</form>";
   }
 
-  $reponse->closeCursor(); // Termine le traitement de la requête
+  $reponse2->closeCursor(); // Termine le traitement de la requête
 
 
   
