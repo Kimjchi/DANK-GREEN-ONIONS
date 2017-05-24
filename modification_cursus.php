@@ -39,7 +39,7 @@
   
   <div class="text-center">
     <h1>Dank website</h1>
-    <h2>With this dank website you will know if u can graduate</h2>
+    <h2>Modification du cursus</h2>
     <p class="lead">
 
 
@@ -47,7 +47,7 @@
       
 <!-- DEBUT DU FORMULAIRE -->
 
-<form action="cursus.php" method="POST">
+<form action="modification_cursus.php" method="POST">
 
 <?php
 
