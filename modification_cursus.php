@@ -150,40 +150,86 @@ $reponse->closeCursor();
 
 //$BDD = new PDO('mysql:host=localhost;dbname=projet lo07', 'root','', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 
-if (isset($_POST['numero_semestre'], $_POST['sem_label'], $_POST['nom_uv'], $_POST['categorie'], $_POST['affectation'], $_POST['utt'], $_POST['profil'], $_POST['credit'], $_POST['resultat'])) {
-
-//On met la formation dans le cursus
-$idCursus=$_POST['idCursus'];
-
-$requete2 = $BDD->prepare('INSERT INTO `formation`(`sem_annee`, `idCursus`) VALUES (?,?)');
-$requete2->execute(array($_POST['sem_annee'], $idCursus));
-
-//On crée l'UV dans la base de donnée
-$requete3 = $BDD->prepare('INSERT INTO `element de formation`(`sigle`, `categorie`, `credit`) VALUES (?,?,?)');
-$requete3->execute(array($_POST['nom_uv'], $_POST['categorie'], $_POST['credit']));
+if (isset($_POST['numero_semestre'], $_POST['sem_label'], $_POST['affectation'], $_POST['utt'], $_POST['profil'], $_POST['resultat'])) {
 
 
-//On met dans la table appartient
-$reponse2 = $BDD->query('SELECT MAX(`idFormation`) FROM `formation`');
-while ($formation = $reponse2->fetch())
-{
-  $idFormation=$formation['MAX(`idFormation`)'];
-}
+  //On regarde si on a le même label de semestre dans le cursus choisi
+  $sem = array();
+  $reponse4 = $BDD->prepare('SELECT `sem_label` FROM `formation` f,`appartient` a WHERE `idCursus` = ? AND f.`idFormation` = a.`idFormation`;');
+  $reponse4->execute(array($_POST['idCursus']));
+  while ($sem_liste = $reponse4->fetch())
+  {
+    $sem[]=$sem_liste['sem_label'];
+  }
+  $identique=FALSE;
+  foreach ($sem as $element) {
+    //Si le sem existe déjà dans le cursus, on lie l'uv choisi à la table qui existe déjà 
+    if ($element == $_POST['sem_label']) {
+      $identique = TRUE;
+      $reponse5 = $BDD->prepare('SELECT f.`idFormation` FROM `formation` f,`appartient` a WHERE f.`idCursus` = ? AND a.`sem_label` = ?;');
+      $reponse5->execute(array($_POST['idCursus'],$_POST['sem_label']));
+      while ($idFormation_existe = $reponse5->fetch())
+      {
+        $idFormation=$idFormation_existe['idFormation'];
+      }
+      $reponse5->closeCursor();
+    }
+    //Sinon, on crée une formation et on récupère l'ID de celle-ci
+    
+  }
+  $reponse4->closeCursor();
 
-$requete = $BDD->prepare('INSERT INTO `appartient`(`sem_seq`, `sem_label`, `sigle`, `affectation`, `utt`, `profil`, `resultat`, `idFormation`)  VALUES (?,?,?,?,?,?,?,?)');
-$requete->execute(array($_POST['numero_semestre'], $_POST['sem_label'], $_POST['nom_uv'], $_POST['affectation'], $_POST['utt'], $_POST['profil'], $_POST['resultat'], $idFormation));
+  if(!$identique){
+      $requete2 = $BDD->prepare('INSERT INTO `formation`(`sem_annee`, `idCursus`) VALUES (?,?)');
+      $requete2->execute(array($_POST['sem_annee'], $_POST['idCursus']));
+
+      $reponse2 = $BDD->query('SELECT MAX(`idFormation`) FROM `formation`');
+      while ($formation = $reponse2->fetch())
+      {
+        $idFormation=$formation['MAX(`idFormation`)'];
+      }
+      $reponse2->closeCursor();
+      $requete2->closeCursor();
+  }
+
+
+  
+
+  //On crée l'UV dans la base de donnée
+  if (!empty($_POST['nom_uv'])){
+    $requete3 = $BDD->prepare('INSERT INTO `element de formation`(`sigle`, `categorie`, `credit`) VALUES (?,?,?)');
+    $requete3->execute(array($_POST['nom_uv'], $_POST['categorie'], $_POST['credit']));
+
+
+
+
+    //On met dans la table appartient
+
+    $requete = $BDD->prepare('INSERT INTO `appartient`(`sem_seq`, `sem_label`, `sigle`, `affectation`, `utt`, `profil`, `resultat`, `idFormation`)  VALUES (?,?,?,?,?,?,?,?)');
+    $requete->execute(array($_POST['numero_semestre'], $_POST['sem_label'], $_POST['nom_uv'], $_POST['affectation'], $_POST['utt'], $_POST['profil'], $_POST['resultat'], $idFormation));
+
+    $requete3->closeCursor();
+  }
+  //Ou on met l'uv existante dans la table appartient
+  else{
+    //On met dans la table appartient
+
+    $requete = $BDD->prepare('INSERT INTO `appartient`(`sem_seq`, `sem_label`, `sigle`, `affectation`, `utt`, `profil`, `resultat`, `idFormation`)  VALUES (?,?,?,?,?,?,?,?)');
+    $requete->execute(array($_POST['numero_semestre'], $_POST['sem_label'], $_POST['uv_existe'], $_POST['affectation'], $_POST['utt'], $_POST['profil'], $_POST['resultat'], $idFormation));
+  }
 
 
 
 
 
-// Termine le traitement de la requête
-//$reponse1->closeCursor();
-$reponse2->closeCursor();
 
-$requete->closeCursor();
-$requete2->closeCursor();
-$requete3->closeCursor();
+
+
+  // Termine le traitement de la requête
+
+  $requete->closeCursor();
+  
+
 
 
 }
