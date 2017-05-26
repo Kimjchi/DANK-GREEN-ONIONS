@@ -60,7 +60,7 @@ function formtext($label,$name,$value){
 //function pour faire la liste déroulante
 function formselect($liste){
 	echo " <label>Etudiant</label> ";
-	echo "<SELECT name='etudiant'>";
+	echo "<SELECT name='numero'>";
 foreach ($liste as $key => $value) {
 	echo "<option value=".$key.">".$value;
 }
@@ -122,7 +122,7 @@ if (isset($_POST['label'], $_POST['numero'])){
 }
 
   $reponse2 = $BDD->query('SELECT * FROM `cursus`');
-  while ($cursus = $reponse->fetch())
+  while ($cursus = $reponse2->fetch())
   {
     echo "<form action='modification_cursus.php' method='POST'> ";
     echo "<input type='hidden' name='idCursus' value=".$cursus['idCursus'].">";
