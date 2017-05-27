@@ -248,5 +248,11 @@ if (isset($_POST['numero_semestre'], $_POST['sem_label'], $_POST['affectation'],
   
 </div><!-- /.container -->
 </body>
+
+<form method="post" action="exportcursus.php">
+  <input type="submit" name="export" value="Exporter le cursus de l'étudiant en CSV">
+</form>
+
+
 </html>
 
