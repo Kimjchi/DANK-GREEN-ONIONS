@@ -141,6 +141,7 @@ $reponse->closeCursor();
 </div>
 
 <input type="submit" value="Valider">
+<br>
 
 
 </form>
@@ -238,40 +239,135 @@ if (isset($_POST['numero_semestre'], $_POST['sem_label'], $_POST['affectation'],
 //Affichage du cursus
 $idFormation2=array();
 $annee=array();
+$sem_label=array();
 
-$reponse3 = $BDD->prepare('SELECT * FROM `formation` WHERE `idCursus`= ? ORDER BY `sem_annee`');
+$reponse9 = $BDD->prepare('SELECT `idFormation`, `sem_annee` FROM `formation` WHERE `idCursus`= ? ORDER BY `sem_annee`');
+$reponse9->execute(array($_POST['idCursus']));
+      while ($formation10 = $reponse9->fetch())
+      {
+        $idFormation2[]=$formation10['idFormation'];
+        $annee[]=$formation10['sem_annee'];
+      }
+      $reponse9->closeCursor();
+
+
+
+$reponse3 = $BDD->prepare('SELECT `sem_annee`, `sem_label` FROM `formation` f,`appartient` a WHERE `idCursus`= ? AND f.`idFormation` = a.`idFormation` ORDER BY `sem_annee`');
 $reponse3->execute(array($_POST['idCursus']));
       while ($formation2 = $reponse3->fetch())
       {
-        $idFormation2[]=$formation2['idFormation'];
-        $annee[]=$formation2['sem_annee'];
+        $sem_label[]=$formation2['sem_label'];
       }
       $reponse3->closeCursor();
-
-foreach ($idFormation2 as $element) {
-  $sigle=array();
-  $i = 0;
-  echo $annee[$i]." - ";
-  $reponse3 = $BDD->prepare('SELECT * FROM `appartient` WHERE `idFormation`= ?');
-  $reponse3->execute(array($element));
-        while ($appartient2 = $reponse3->fetch())
-        {
-          $sem_label=$appartient2['sem_label'];
-          $sigle[]=$appartient2['sigle'];
-        }
-        $reponse3->closeCursor();
-
-        echo $sem_label." : ";
-        foreach ($sigle as $element) {
-          echo $element."<br>";
-        }
-        $i++;
-}
 
 
 ?>
 
+  <table border="1" class="table">
+    <thead>
+      <td></td><td> CS </td><td> TM </td><td> ST </td><td> EC </td><td >ME </td><td> CT </td><td> HP </td><td> NPML </td>
+    </thead>
+    <tbody>
+    <?php
+      $i = 0;
+      foreach ($idFormation2 as $element) {
 
+        $uv_cs=array();
+        $uv_tm=array();
+        $uv_st=array();
+        $uv_ec=array();
+        $uv_me=array();
+        $uv_ct=array();
+        $uv_hp=array();
+        $npml_admis = FALSE;
+
+        $reponse3 = $BDD->prepare('SELECT * FROM `appartient` a,`element de formation` e WHERE `idFormation`= ? AND a.`sigle` = e.`sigle` ORDER BY `categorie`');
+        $reponse3->execute(array($element));
+              while ($appartient2 = $reponse3->fetch())
+              {
+                switch($appartient2['categorie']){
+                  case "CS":
+                    $uv_cs[$appartient2['sigle']]=$appartient2['resultat'];
+                    break;
+                  case "TM":
+                    $uv_tm[$appartient2['sigle']]=$appartient2['resultat'];
+                    break;
+                  case "ST":
+                    $uv_st[$appartient2['sigle']]=$appartient2['resultat'];
+                    break;
+                  case "EC":
+                    $uv_ec[$appartient2['sigle']]=$appartient2['resultat'];
+                    break;
+                  case "ME":
+                    $uv_me[$appartient2['sigle']]=$appartient2['resultat'];
+                    break;
+                  case "CT":
+                    $uv_ct[$appartient2['sigle']]=$appartient2['resultat'];
+                    break;
+                  case "HP":
+                    $uv_hp[$appartient2['sigle']]=$appartient2['resultat'];
+                    break;
+                  case "NPML":
+                    if ($appartient2['resultat']=="ADM") {
+                      $npml_admis=TRUE;
+                    }
+                    break;
+                }
+              }
+              $reponse3->closeCursor();
+
+        echo "<tr>";
+        echo "<td>".$annee[$i]."<br>".$sem_label[$i]."</td>";
+        echo "<td>";
+          foreach ($uv_cs as $key => $value) {
+            echo $key." ".$value."<br>";
+          }
+        echo"</td>";
+        echo "<td>";
+          foreach ($uv_tm as $key => $value) {
+            echo $key." ".$value."<br>";
+          }
+        echo"</td>";
+        echo "<td>";
+          foreach ($uv_st as $key => $value) {
+            echo $key." ".$value."<br>";
+          }
+        echo"</td>";
+        echo "<td>";
+          foreach ($uv_ec as $key => $value) {
+            echo $key." ".$value."<br>";
+          }
+        echo"</td>";
+        echo "<td>";
+          foreach ($uv_me as $key => $value) {
+            echo $key." ".$value."<br>";
+          }
+        echo"</td>";
+        echo "<td>";
+          foreach ($uv_ct as $key => $value) {
+            echo $key." ".$value."<br>";
+          }
+        echo"</td>";
+        echo "<td>";
+          foreach ($uv_hp as $key => $value) {
+            echo $key." ".$value."<br>";
+          }
+        echo"</td>";
+        echo "<td>";
+          if($npml_admis){
+            echo "BULE ADM";
+          }
+        echo"</td>";
+
+
+        echo "</tr>";
+
+        $i++;
+      }
+
+    ?>
+    </tbody>
+  </table>
 
 
 
