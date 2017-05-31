@@ -263,7 +263,7 @@ $reponse3->execute(array($_POST['idCursus']));
 
 ?>
 
-  <table border="1" class="table">
+  <table class="table table-striped">
     <thead>
       <td></td><td> CS </td><td> TM </td><td> ST </td><td> EC </td><td >ME </td><td> CT </td><td> HP </td><td> NPML </td>
     </thead>
