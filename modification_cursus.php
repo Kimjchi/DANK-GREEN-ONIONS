@@ -96,7 +96,7 @@ echo "<input type='hidden' name='label' value=".$_POST['label'].">";
 $BDD = new PDO('mysql:host=localhost;dbname=projet lo07', 'root','', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 $nom_uv = array();
 $i=0;
-$reponse = $BDD->query('SELECT (`sigle`) FROM `element de formation`');
+$reponse = $BDD->query('SELECT (`sigle`) FROM `element_de_formation`');
 while ($uv = $reponse->fetch())
 {
   $nom_uv[]=$uv[0];
@@ -198,7 +198,7 @@ if (isset($_POST['numero_semestre'], $_POST['sem_label'], $_POST['affectation'],
 
   //On crée l'UV dans la base de donnée
   if (!empty($_POST['nom_uv'])){
-    $requete3 = $BDD->prepare('INSERT INTO `element de formation`(`sigle`, `categorie`, `credit`) VALUES (?,?,?)');
+    $requete3 = $BDD->prepare('INSERT INTO `element_de_formation`(`sigle`, `categorie`, `credit`) VALUES (?,?,?)');
     $requete3->execute(array($_POST['nom_uv'], $_POST['categorie'], $_POST['credit']));
 
 
@@ -281,7 +281,7 @@ $reponse3->execute(array($_POST['idCursus']));
         $uv_hp=array();
         $npml_admis = FALSE;
 
-        $reponse3 = $BDD->prepare('SELECT * FROM `appartient` a,`element de formation` e WHERE `idFormation`= ? AND a.`sigle` = e.`sigle` ORDER BY `categorie`');
+        $reponse3 = $BDD->prepare('SELECT * FROM `appartient` a,`element_de_formation` e WHERE `idFormation`= ? AND a.`sigle` = e.`sigle` ORDER BY `categorie`');
         $reponse3->execute(array($element));
               while ($appartient2 = $reponse3->fetch())
               {

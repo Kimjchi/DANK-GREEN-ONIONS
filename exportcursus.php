@@ -9,7 +9,9 @@ if(isset($_POST['export']))
 	$BDD->setAttribute(PDO:: ATTR_DEFAULT_FETCH_MODE,PDO::FETCH_OBJ);
 
 
-$requete = $BDD->prepare('SELECT * FROM appartient');
+$requete = $BDD->prepare('SELECT *
+FROM appartient, element_de_formation
+WHERE appartient.sigle = element_de_formation.sigle');
 $requete-> execute();
 $cursus = $requete->fetchALL();
 //print_r($cursus);
@@ -17,9 +19,9 @@ $cursus = $requete->fetchALL();
 //manque categorie, credit, idk comment faire un csv pour plusieurs tables
 
 
-?>"sem_seq","sem_label","sigle","affectation","utt","profil","resultat"<?php
+?>"sem_seq","sem_label","sigle","categorie","credit","affectation","utt","profil","resultat"<?php
 foreach ($cursus as $c) {
-	echo "\n".'"'.$c->sem_seq.'";"'.$c->sem_label.'";"'.$c->sigle.'";"'.$c->affectation.'";"'.$c->utt.'";"'.$c->profil.'";"'.$c->resultat.'"';
+	echo "\n".'"'.$c->sem_seq.'";"'.$c->sem_label.'";"'.$c->sigle.'";"'.$c->categorie.'";"'.$c->credit.'";"'.$c->affectation.'";"'.$c->utt.'";"'.$c->profil.'";"'.$c->resultat.'"';
 }}?>
 
 
