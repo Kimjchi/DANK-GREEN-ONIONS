@@ -235,6 +235,38 @@ if (isset($_POST['numero_semestre'], $_POST['sem_label'], $_POST['affectation'],
 }
 
 
+//Affichage du cursus
+$idFormation2=array();
+$annee=array();
+
+$reponse3 = $BDD->prepare('SELECT * FROM `formation` WHERE `idCursus`= ? ORDER BY `sem_annee`');
+$reponse3->execute(array($_POST['idCursus']));
+      while ($formation2 = $reponse3->fetch())
+      {
+        $idFormation2[]=$formation2['idFormation'];
+        $annee[]=$formation2['sem_annee'];
+      }
+      $reponse3->closeCursor();
+
+foreach ($idFormation2 as $element) {
+  $sigle=array();
+  $i = 0;
+  echo $annee[$i]." - ";
+  $reponse3 = $BDD->prepare('SELECT * FROM `appartient` WHERE `idFormation`= ?');
+  $reponse3->execute(array($element));
+        while ($appartient2 = $reponse3->fetch())
+        {
+          $sem_label=$appartient2['sem_label'];
+          $sigle[]=$appartient2['sigle'];
+        }
+        $reponse3->closeCursor();
+
+        echo $sem_label." : ";
+        foreach ($sigle as $element) {
+          echo $element."<br>";
+        }
+        $i++;
+}
 
 
 ?>
