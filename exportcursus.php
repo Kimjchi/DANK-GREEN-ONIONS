@@ -21,7 +21,7 @@ $cursus = $requete->fetchALL();
 
 ?>"sem_seq","sem_label","sigle","categorie","credit","affectation","utt","profil","resultat"<?php
 foreach ($cursus as $c) {
-	echo "\n".'"'.$c->sem_seq.'";"'.$c->sem_label.'";"'.$c->sigle.'";"'.$c->categorie.'";"'.$c->credit.'";"'.$c->affectation.'";"'.$c->utt.'";"'.$c->profil.'";"'.$c->resultat.'"';
+	echo "\n".'"'.$c->sem_seq.'";"'.$c->sigle.'";"'.$c->categorie.'";"'.$c->credit.'";"'.$c->affectation.'";"'.$c->utt.'";"'.$c->profil.'";"'.$c->resultat.'"';
 }}?>
 
 

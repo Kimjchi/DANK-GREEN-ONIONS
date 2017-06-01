@@ -156,7 +156,7 @@ if (isset($_POST['numero_semestre'], $_POST['sem_label'], $_POST['affectation'],
 
   //On regarde si on a le même label de semestre dans le cursus choisi
   $sem = array();
-  $reponse4 = $BDD->prepare('SELECT `sem_label` FROM `formation` f,`appartient` a WHERE `idCursus` = ? AND f.`idFormation` = a.`idFormation`;');
+  $reponse4 = $BDD->prepare('SELECT `sem_label` FROM `formation` WHERE `idCursus` = ?');
   $reponse4->execute(array($_POST['idCursus']));
   while ($sem_liste = $reponse4->fetch())
   {
@@ -167,7 +167,7 @@ if (isset($_POST['numero_semestre'], $_POST['sem_label'], $_POST['affectation'],
     //Si le sem existe déjà dans le cursus, on lie l'uv choisi à la table qui existe déjà 
     if ($element == $_POST['sem_label']) {
       $identique = TRUE;
-      $reponse5 = $BDD->prepare('SELECT f.`idFormation` FROM `formation` f,`appartient` a WHERE f.`idCursus` = ? AND a.`sem_label` = ?;');
+      $reponse5 = $BDD->prepare('SELECT `idFormation` FROM `formation` WHERE `idCursus` = ? AND `sem_label` = ?;');
       $reponse5->execute(array($_POST['idCursus'],$_POST['sem_label']));
       while ($idFormation_existe = $reponse5->fetch())
       {
@@ -181,8 +181,8 @@ if (isset($_POST['numero_semestre'], $_POST['sem_label'], $_POST['affectation'],
   $reponse4->closeCursor();
 
   if(!$identique){
-      $requete2 = $BDD->prepare('INSERT INTO `formation`(`sem_annee`, `idCursus`) VALUES (?,?)');
-      $requete2->execute(array($_POST['sem_annee'], $_POST['idCursus']));
+      $requete2 = $BDD->prepare('INSERT INTO `formation`(`sem_annee`, `idCursus`, `sem_label`) VALUES (?,?)');
+      $requete2->execute(array($_POST['sem_annee'], $_POST['idCursus'], $_POST['sem_label']));
 
       $reponse2 = $BDD->query('SELECT MAX(`idFormation`) FROM `formation`');
       while ($formation = $reponse2->fetch())
@@ -206,8 +206,8 @@ if (isset($_POST['numero_semestre'], $_POST['sem_label'], $_POST['affectation'],
 
     //On met dans la table appartient
 
-    $requete = $BDD->prepare('INSERT INTO `appartient`(`sem_seq`, `sem_label`, `sigle`, `affectation`, `utt`, `profil`, `resultat`, `idFormation`)  VALUES (?,?,?,?,?,?,?,?)');
-    $requete->execute(array($_POST['numero_semestre'], $_POST['sem_label'], $_POST['nom_uv'], $_POST['affectation'], $_POST['utt'], $_POST['profil'], $_POST['resultat'], $idFormation));
+    $requete = $BDD->prepare('INSERT INTO `appartient`(`sem_seq`, `sigle`, `affectation`, `utt`, `profil`, `resultat`, `idFormation`)  VALUES (?,?,?,?,?,?,?,?)');
+    $requete->execute(array($_POST['numero_semestre'], $_POST['nom_uv'], $_POST['affectation'], $_POST['utt'], $_POST['profil'], $_POST['resultat'], $idFormation));
 
     $requete3->closeCursor();
   }
@@ -215,8 +215,8 @@ if (isset($_POST['numero_semestre'], $_POST['sem_label'], $_POST['affectation'],
   else{
     //On met dans la table appartient
 
-    $requete = $BDD->prepare('INSERT INTO `appartient`(`sem_seq`, `sem_label`, `sigle`, `affectation`, `utt`, `profil`, `resultat`, `idFormation`)  VALUES (?,?,?,?,?,?,?,?)');
-    $requete->execute(array($_POST['numero_semestre'], $_POST['sem_label'], $_POST['uv_existe'], $_POST['affectation'], $_POST['utt'], $_POST['profil'], $_POST['resultat'], $idFormation));
+    $requete = $BDD->prepare('INSERT INTO `appartient`(`sem_seq`, `sigle`, `affectation`, `utt`, `profil`, `resultat`, `idFormation`)  VALUES (?,?,?,?,?,?,?,?)');
+    $requete->execute(array($_POST['numero_semestre'], $_POST['uv_existe'], $_POST['affectation'], $_POST['utt'], $_POST['profil'], $_POST['resultat'], $idFormation));
   }
 
 
@@ -241,24 +241,17 @@ $idFormation2=array();
 $annee=array();
 $sem_label=array();
 
-$reponse9 = $BDD->prepare('SELECT `idFormation`, `sem_annee` FROM `formation` WHERE `idCursus`= ? ORDER BY `sem_annee`');
+$reponse9 = $BDD->prepare('SELECT `idFormation`, `sem_annee`, `sem_label` FROM `formation` WHERE `idCursus`= ? ORDER BY `sem_annee`');
 $reponse9->execute(array($_POST['idCursus']));
       while ($formation10 = $reponse9->fetch())
       {
         $idFormation2[]=$formation10['idFormation'];
         $annee[]=$formation10['sem_annee'];
+        $sem_label[]=$formation10['sem_label'];
       }
       $reponse9->closeCursor();
 
 
-
-$reponse3 = $BDD->prepare('SELECT `sem_annee`, `sem_label` FROM `formation` f,`appartient` a WHERE `idCursus`= ? AND f.`idFormation` = a.`idFormation` ORDER BY `sem_annee`');
-$reponse3->execute(array($_POST['idCursus']));
-      while ($formation2 = $reponse3->fetch())
-      {
-        $sem_label[]=$formation2['sem_label'];
-      }
-      $reponse3->closeCursor();
 
 
 ?>
