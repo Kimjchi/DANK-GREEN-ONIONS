@@ -106,6 +106,8 @@ $reponse->closeCursor();
 </form>
 </br>
 
+<h2>Sélectionner un cursus existant</h2>
+<br>
 
 <?php  
 

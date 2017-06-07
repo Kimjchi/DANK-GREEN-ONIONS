@@ -417,6 +417,7 @@ echo "<input type='hidden' name='idCursus' value=".$_POST['idCursus'].">";
 <h2>Importation de Cursus</h2>
 <h3>Veuillez charger un fichier au format .csv</h3>
   <form method="POST" enctype="multipart/form-data" action="import.php">
+
     <div class="col-lg-7 col-lg-offset-7"><input  type="file" name="userfile" value="table"></div><br>
     <input class="btn btn-primary" type="submit" name="submit" value="Importer">
 
