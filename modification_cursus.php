@@ -128,9 +128,6 @@ formselect($numero_semestre,'numero_semestre', 'Numéro du semestre');
 //form pour le label du semestre
 formtext("Label semestre", "sem_label","ex : ISI1");
 
-
-formtext("Semestre", "sem_annee", "P16");
-
 $affectation = array('TCBR','BR','FCBR');
 formselect($affectation,'affectation', 'Affectation');
 
@@ -242,8 +239,8 @@ if (isset($_POST['numero_semestre'], $_POST['sem_label'], $_POST['affectation'],
   $reponse4->closeCursor();
 
   if(!$identique){
-      $requete2 = $BDD->prepare('INSERT INTO `formation`(`sem_annee`, `idCursus`, `sem_label`) VALUES (?,?,?)');
-      $requete2->execute(array($_POST['sem_annee'], $_POST['idCursus'], $_POST['sem_label']));
+      $requete2 = $BDD->prepare('INSERT INTO `formation`(`idCursus`, `sem_label`) VALUES (?,?)');
+      $requete2->execute(array($_POST['idCursus'], $_POST['sem_label']));
 
       $reponse2 = $BDD->query('SELECT MAX(`idFormation`) FROM `formation`');
       while ($formation = $reponse2->fetch())
@@ -299,15 +296,13 @@ if (isset($_POST['numero_semestre'], $_POST['sem_label'], $_POST['affectation'],
 
 //Affichage du cursus
 $idFormation2=array();
-$annee=array();
 $sem_label=array();
 
-$reponse9 = $BDD->prepare('SELECT `idFormation`, `sem_annee`, `sem_label` FROM `formation` WHERE `idCursus`= ? ORDER BY `sem_label`');
+$reponse9 = $BDD->prepare('SELECT `idFormation`, `sem_label` FROM `formation` WHERE `idCursus`= ? ORDER BY `sem_label`');
 $reponse9->execute(array($_POST['idCursus']));
       while ($formation10 = $reponse9->fetch())
       {
         $idFormation2[]=$formation10['idFormation'];
-        $annee[]=$formation10['sem_annee'];
         $sem_label[]=$formation10['sem_label'];
       }
       $reponse9->closeCursor();
@@ -371,7 +366,7 @@ $reponse9->execute(array($_POST['idCursus']));
               $reponse3->closeCursor();
 
         echo "<tr>";
-        echo "<td>".$annee[$i]."<br>".$sem_label[$i]."</td>";
+        echo "<td>".$sem_label[$i]."</td>";
         echo "<td>";
           foreach ($uv_cs as $key => $value) {
             echo $key." ".$value."<br>";
