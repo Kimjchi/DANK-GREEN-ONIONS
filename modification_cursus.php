@@ -76,6 +76,35 @@
 
 <?php
 
+function compteCredits($categorie, $formation){
+  $resultat=array();
+  $credit=array();
+  $BDD = new PDO('mysql:host=localhost;dbname=projet lo07', 'root','', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)); 
+  $reponse30 = $BDD->prepare('SELECT resultat, credit FROM `appartient` a,`element_de_formation` e WHERE `idFormation`= ? AND a.`sigle` = e.`sigle` AND `categorie`= ?');
+  $reponse30->execute(array($formation,$categorie));
+  while ($appartient20 = $reponse30->fetch())
+  {
+    $resultat[]=$appartient20['resultat'];
+    $credit[]=$appartient20['credit'];
+  }
+  $reponse30->closeCursor();
+  $total=0;
+  $i=0;
+  foreach ($resultat as $element) {
+    if ($element!='F') {
+      $total+=$credit[$i];
+      
+    }
+    $i++;
+  }
+
+  return $total;
+}
+
+function compteCreditsRegle($categorie, $affectation){
+
+}
+
 echo "<h3>Modification du cursus : ".$_POST['label']."</h3></br>" ;
 
 //function pour faire un form avec du texte
@@ -273,7 +302,7 @@ $idFormation2=array();
 $annee=array();
 $sem_label=array();
 
-$reponse9 = $BDD->prepare('SELECT `idFormation`, `sem_annee`, `sem_label` FROM `formation` WHERE `idCursus`= ? ORDER BY `sem_annee`');
+$reponse9 = $BDD->prepare('SELECT `idFormation`, `sem_annee`, `sem_label` FROM `formation` WHERE `idCursus`= ? ORDER BY `sem_label`');
 $reponse9->execute(array($_POST['idCursus']));
       while ($formation10 = $reponse9->fetch())
       {
@@ -387,6 +416,42 @@ $reponse9->execute(array($_POST['idCursus']));
 
         echo "</tr>";
 
+        echo "<tr>";
+
+        echo "<td>";
+        echo "Total semestre";
+        echo "</td>";
+
+        echo "<td>";
+        echo compteCredits('CS',$element);
+        echo "</td>";
+
+        echo "<td>";
+        echo compteCredits('TM',$element);
+        echo "</td>";
+
+        echo "<td>";
+        echo compteCredits('ST',$element);
+        echo "</td>";
+
+        echo "<td>";
+        echo compteCredits('EC',$element);
+        echo "</td>";
+
+        echo "<td>";
+        echo compteCredits('ME',$element);
+        echo "</td>";
+
+        echo "<td>";
+        echo compteCredits('CT',$element);
+        echo "</td>";
+
+        echo "<td>";
+        echo compteCredits('HP',$element);
+        echo "</td>";
+
+        echo "</tr>";
+
         $i++;
       }
 
@@ -417,8 +482,11 @@ echo "<input type='hidden' name='idCursus' value=".$_POST['idCursus'].">";
 <h2>Importation de Cursus</h2>
 <h3>Veuillez charger un fichier au format .csv</h3>
   <form method="POST" enctype="multipart/form-data" action="import.php">
-
     <div class="col-lg-7 col-lg-offset-7"><input  type="file" name="userfile" value="table"></div><br>
+    <?php  
+      echo "<input type='hidden' name='idCursus' value=".$_POST['idCursus'].">";
+    ?>
+
     <input class="btn btn-primary" type="submit" name="submit" value="Importer">
 
 
