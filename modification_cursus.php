@@ -1,6 +1,4 @@
 
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,6 +8,33 @@
   <link href="css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script src="css/bootstrap/js/bootstrap.min.js"></script>
+
+  <script type="text/javascript" language="Javascript">
+
+
+    function validForm(){
+      var valide = true;
+      var semValue = document.FormIdent.sem_label.value;
+      var uvValue = document.FormIdent.nom_uv.value;
+      $("#alertSem").hide();
+      $("#alertUv").hide();
+      //mise en majuscule
+      var semUpper = semValue.toUpperCase();
+      if(semUpper != semValue){
+        $("#alertSem").show();
+        valide = false;
+      }
+      var uvUpper = uvValue.toUpperCase();
+      if(uvUpper != uvValue){
+        $("#alertUv").show();
+        valide = false;
+      }
+
+      return valide;
+    }
+  </script>
+  
+
 </head>
 <body>
   <div class="navbar navbar-inverse navbar-fixed-top">
@@ -47,7 +72,7 @@
       
 <!-- DEBUT DU FORMULAIRE -->
 
-<form action="modification_cursus.php" method="POST">
+<form action="modification_cursus.php" method="POST" id="FormIdent" name="FormIdent" onsubmit="return validForm();">
 
 <?php
 
@@ -140,6 +165,13 @@ $reponse->closeCursor();
     </div>
 </div>
 
+<div class="alert alert-danger collapse" role="alert" id="alertSem">
+  <strong>Attention !</strong> Le label du semestre doit être en majuscule.
+</div>
+<div class="alert alert-danger collapse" role="alert" id="alertUv">
+  <strong>Attention !</strong> Le nom de l'UV doit être en majuscule.
+</div>
+
 <input type="submit" value="Valider">
 <br>
 
@@ -181,7 +213,7 @@ if (isset($_POST['numero_semestre'], $_POST['sem_label'], $_POST['affectation'],
   $reponse4->closeCursor();
 
   if(!$identique){
-      $requete2 = $BDD->prepare('INSERT INTO `formation`(`sem_annee`, `idCursus`, `sem_label`) VALUES (?,?)');
+      $requete2 = $BDD->prepare('INSERT INTO `formation`(`sem_annee`, `idCursus`, `sem_label`) VALUES (?,?,?)');
       $requete2->execute(array($_POST['sem_annee'], $_POST['idCursus'], $_POST['sem_label']));
 
       $reponse2 = $BDD->query('SELECT MAX(`idFormation`) FROM `formation`');
@@ -206,7 +238,7 @@ if (isset($_POST['numero_semestre'], $_POST['sem_label'], $_POST['affectation'],
 
     //On met dans la table appartient
 
-    $requete = $BDD->prepare('INSERT INTO `appartient`(`sem_seq`, `sigle`, `affectation`, `utt`, `profil`, `resultat`, `idFormation`)  VALUES (?,?,?,?,?,?,?,?)');
+    $requete = $BDD->prepare('INSERT INTO `appartient`(`sem_seq`, `sigle`, `affectation`, `utt`, `profil`, `resultat`, `idFormation`)  VALUES (?,?,?,?,?,?,?)');
     $requete->execute(array($_POST['numero_semestre'], $_POST['nom_uv'], $_POST['affectation'], $_POST['utt'], $_POST['profil'], $_POST['resultat'], $idFormation));
 
     $requete3->closeCursor();
@@ -215,7 +247,7 @@ if (isset($_POST['numero_semestre'], $_POST['sem_label'], $_POST['affectation'],
   else{
     //On met dans la table appartient
 
-    $requete = $BDD->prepare('INSERT INTO `appartient`(`sem_seq`, `sigle`, `affectation`, `utt`, `profil`, `resultat`, `idFormation`)  VALUES (?,?,?,?,?,?,?,?)');
+    $requete = $BDD->prepare('INSERT INTO `appartient`(`sem_seq`, `sigle`, `affectation`, `utt`, `profil`, `resultat`, `idFormation`)  VALUES (?,?,?,?,?,?,?)');
     $requete->execute(array($_POST['numero_semestre'], $_POST['uv_existe'], $_POST['affectation'], $_POST['utt'], $_POST['profil'], $_POST['resultat'], $idFormation));
   }
 
@@ -371,6 +403,9 @@ $reponse9->execute(array($_POST['idCursus']));
 </body>
 
 <form method="post" action="exportcursus.php">
+<?php
+echo "<input type='hidden' name='idCursus' value=".$_POST['idCursus'].">";
+?>
   <input type="submit" name="export" value="Exporter le cursus de l'étudiant en CSV">
 </form>
 
