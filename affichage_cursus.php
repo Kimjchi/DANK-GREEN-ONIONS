@@ -23,7 +23,7 @@
 
     <table class="table table-striped">
       <thead>
-        <td></td><td> CS </td><td> TM </td><td> ST </td><td> EC </td><td >ME </td><td> CT </td><td> HP </td><td> NPML </td>
+        <td></td><td> CS </td><td> TM </td><td> ST </td><td> EC </td><td >ME </td><td> CT </td><td> HP </td><td> NPML </td> <td>Supprimer une UV du semestre</td>
       </thead>
       <tbody>
       <?php
@@ -38,7 +38,7 @@
           $uv_ct=array();
           $uv_hp=array();
           $npml_admis = FALSE;
-
+          $uv_semestre=array();
           $reponse3 = $BDD->prepare('SELECT * FROM `appartient` a,`element_de_formation` e WHERE `idFormation`= ? AND a.`sigle` = e.`sigle` ORDER BY `categorie`');
           $reponse3->execute(array($element));
                 while ($appartient2 = $reponse3->fetch())
@@ -71,8 +71,12 @@
                       }
                       break;
                   }
+                  $uv_semestre[]=$appartient2['sigle'];
                 }
                 $reponse3->closeCursor();
+
+//print_r($uv_semestre);
+
 
           echo "<tr>";
           echo "<td>".$sem_label[$i]."</td>";
@@ -112,6 +116,7 @@
             }
           echo"</td>";
           echo "<td>";
+          echo " ";
             if($npml_admis){
               echo "BULE ADM";
             }
@@ -153,6 +158,21 @@
           echo "<td>";
           echo compteCredits('HP',$element);
           echo "</td>";
+
+//liste déroulante uv pour supprimer uv
+echo "<td>";
+echo "</td><td> ";         
+echo "<form method=post action='supprimer.php'>";
+echo "<SELECT name='supprimer'>";
+foreach ($uv_semestre as $uv) {
+echo "<option name='uv_supprimer'>".$uv;
+}
+echo "</select>";
+echo "<input type='hidden' name='idFormation' value=".$element.">";
+echo "<input type=submit value=Supprimer> ";
+echo "</form>";
+echo "</td>"; 
+
 
           echo "</tr>";
 
