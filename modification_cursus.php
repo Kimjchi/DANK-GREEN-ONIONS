@@ -269,7 +269,9 @@ if (isset($_POST['numero_semestre'], $_POST['sem_label'], $_POST['affectation'],
 
 
 //Affichage du cursus
-include 'affichage_cursus.php'
+include 'affichage_cursus.php';
+include 'agregat_cursus.php';
+
 ?>
 
 
