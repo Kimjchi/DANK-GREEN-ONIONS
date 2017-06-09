@@ -1,9 +1,19 @@
-<?php
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Import</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link href="css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="css/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <?php
 $BDD = new PDO('mysql:host=localhost;dbname=projet lo07', 'root','', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 $filename = $_FILES["userfile"]['tmp_name']; 
 $csv = file_get_contents($filename);
 $csv_lines = preg_split('/\\r\\n|\\r|\\n/', $csv);
-print_r($csv_lines);
 
 
 
@@ -16,7 +26,6 @@ print_r($csv_lines);
 
 foreach ($csv_lines as $element) {
     list($sem_seq, $sem_label , $sigle, $categorie, $credit, $affectation, $utt, $profil, $resultat)= explode(",", $element);
-    echo $sigle;
 
     //On regarde si on a le même label de semestre dans le cursus choisi
     $sem = array();
@@ -78,6 +87,7 @@ foreach ($csv_lines as $element) {
             $requete3->execute(array($sem_seq, strval($sigle) , strval($affectation), strval($utt), strval($profil), strval($resultat), $idFormation));
 
             $requete3->closeCursor();
+
         }
 
     else { //on ajoute l'uv dans la bdd
@@ -95,13 +105,18 @@ foreach ($csv_lines as $element) {
 
 
 
-
-
-
-
-
-
-
 ?>
+<div class="alert alert-success" role="alert"><strong>L'importation est réussite ! </strong></div>
+
+<form action="modification_cursus.php" method="POST">
+    <?php 
+    echo "<input type='hidden' name='idCursus' value=".$_POST['idCursus'].">";
+    echo "<input type='hidden' name='label' value=".$_POST['label'].">";
+    echo '<input class="btn btn-primary" type="submit" value="Retourner sur le cursus">';
+    ?>
+</form>
 
 
+
+</body>
+</html>

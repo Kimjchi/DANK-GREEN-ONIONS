@@ -1,4 +1,5 @@
-<?php
+
+	<?php
 header('Content-Type=text/csv');
 header('Content-Disposition: attachment; filename="Export_cursus.csv');
 if(isset($_POST['export']))
@@ -21,6 +22,7 @@ $cursus = $requete->fetchALL();
 foreach ($cursus as $c) {
 	echo "\n".'"'.$c->sem_seq.'";"'.$c->sem_label.'";"'.$c->sigle.'";"'.$c->categorie.'";"'.$c->credit.'";"'.$c->affectation.'";"'.$c->utt.'";"'.$c->profil.'";"'.$c->resultat.'"';
 }}?>
+
 
 
 

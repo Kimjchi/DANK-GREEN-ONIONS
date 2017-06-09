@@ -169,6 +169,8 @@ echo "<option name='uv_supprimer'>".$uv;
 }
 echo "</select>";
 echo "<input type='hidden' name='idFormation' value=".$element.">";
+echo "<input type='hidden' name='idCursus' value=".$_POST['idCursus'].">";
+echo "<input type='hidden' name='label' value=".$_POST['label'].">";
 echo "<input type=submit value=Supprimer> ";
 echo "</form>";
 echo "</td>"; 
