@@ -96,12 +96,12 @@
 function formtext($name,$label){
     echo "<div class='row control-group'>";
     echo "<div class='form-group col-xs-12 floating-label-form-group controls'>";
-    echo " <label>".$label."</label> <input type=text  class='form-control' placeholder='".$label."' name='".$name."'>";
+    echo " <label>".$label."</label> <input type=text  class='form-control' placeholder='".$label."' name=".$name.">";
     echo "</div></div>";
 }
 //function pour faire la liste déroulante
-function formselect($liste,$nomselect){
-    echo " <label>".$nomselect."</label> ";
+function formselect($liste,$nomselect,$label2){
+    echo " <label>".$label2."</label> ";
     echo "<SELECT class='form-control' name=".$nomselect.">";
 foreach ($liste as $key) {
     echo "<option name=".$key.">".$key;
@@ -117,10 +117,10 @@ formtext('prenom','Prénom');
 echo "<br>";
 
 $admission = array('TC','BR');
-formselect($admission,'Admission');
+formselect($admission,'admission','Admission');
 
 $filiere = array('?','MPL','MSI','MRI','LIB.');
-formselect($filiere,'Filière');
+formselect($filiere,'filiere','Filière');
 
 
 
