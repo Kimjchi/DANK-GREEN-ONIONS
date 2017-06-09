@@ -92,5 +92,6 @@ Pour remplir le cursus d'un étudiants déjà inscrits, cliquez <a href="cursus.
   </div>
 
 </div><!-- /.container -->
+
 </body>
 </html>
