@@ -98,7 +98,7 @@ foreach ($csv_lines as $element) {
         }
 }
 
-
+}
 
 
 ?>

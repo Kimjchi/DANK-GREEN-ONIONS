@@ -78,7 +78,7 @@
                         <a href="cursus.php">Cursus</a>
                     </li>
                     <li>
-                        <a href="contact.html">About</a>
+                        <a href="about.html">About</a>
                     </li>
                 </ul>
             </div>

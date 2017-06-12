@@ -58,7 +58,7 @@
                         <a href="cursus.php">Cursus</a>
                     </li>
                     <li>
-                        <a href="contact.html">About</a>
+                        <a href="about.html">About</a>
                     </li>
                 </ul>
             </div>
@@ -69,7 +69,7 @@
 
     <!-- Page Header -->
     <!-- Set your background image for this header on the line below. -->
-    <header class="intro-header" style="background-image: url('img/cursus.png')">
+    <header class="intro-header" style="background-image: url('img/cursus-min.png')">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">

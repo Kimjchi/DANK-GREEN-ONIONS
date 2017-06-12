@@ -54,7 +54,7 @@
                         <a href="cursus.php">Cursus</a>
                     </li>
                     <li>
-                        <a href="contact.html">About</a>
+                        <a href="about.html">About</a>
                     </li>
                 </ul>
             </div>
@@ -83,7 +83,6 @@
     <div class="container">
  <div class="text-center">
  <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-    <h1>Dank website</h1>
     <h2>Veuillez renseigner les informations de l'étudiant.</h2>
     <p class="lead">
         
@@ -134,7 +133,7 @@ formselect($filiere,'filiere','Filière');
 </form>
 
 <br>
-Pour remplir le cursus d'un étudiants déjà inscrits, cliquez <a href="cursus.php" style="color: blue">ici.</a>
+Pour remplir le cursus d'un étudiants déjà inscrit, cliquez <a href="cursus.php" style="color: blue">ici.</a>
 
     </p>
   </div>
