@@ -97,7 +97,7 @@
                         <h1>Modifier un cursus</h1>
                         <h2 class="subheading">Imaginez un cursus personalisé.</h2>
                         <hr>
-                        <h3><a href="#toto" style="color: white">Totaux</a> - <a href="#diplomable" style="color: white">Progression</a> - <a href="#import" style="color: white">Importer un Cursus</a></h3>
+                        <h3><a href="#toto" style="color: white">Totaux</a> - <a href="#diplomable" style="color: white">Progression</a> - <a href="#import" style="color: white">Importer un Cursus</a><a href="#dupliquer" style="color: white"> - Dupliquer le Cursus</a></h3>
                     </div>
                 </div>
             </div>
@@ -246,11 +246,36 @@ echo "<input type='hidden' name='label' value=".$_POST['label'].">";
 
     <input class="btn btn-primary" type="submit" name="submit" value="Importer">
 
-
-
-
   </form>
 </div>
+<?php
+/* Duppliquer, pas eu le temps de finir
+
+
+<div class="text-center" id="dupliquer">
+  <form method="post" action="dupliquer.php">
+   
+  <?php  
+   echo "<input type='hidden' name='idCursus' value=".$_POST['idCursus'].">";
+   ?>
+  <hr>
+  <br>
+
+  <label>Nom du nouveau cursus</label> 
+  <input type="text" name="label">
+  <br>
+  <br>
+  <input class="btn btn-default" type="submit" name="duppliquer" value="Dupliquer">
+
+  </form>
+
+
+
+</div>
+*/
+?>
+
+
 
             </div>
         </div>

@@ -1,5 +1,4 @@
-
-	<?php
+<?php
 header('Content-Type=text/csv');
 header('Content-Disposition: attachment; filename="Export_cursus.csv');
 if(isset($_POST['export']))
@@ -12,10 +11,8 @@ if(isset($_POST['export']))
 
 $requete = $BDD->prepare('SELECT * FROM formation f, cursus c, appartient a, element_de_formation e WHERE c.idCursus = ? AND c.idCursus=f.idCursus AND f.idFormation=a.idFormation AND a.sigle=e.sigle;');
 $requete-> execute(array($_POST['idCursus']));
-$cursus = $requete->fetchALL();
-//print_r($cursus);
+$cursus = $requete->fetchALL();//print_r($cursus);
 
-//manque categorie, credit, idk comment faire un csv pour plusieurs tables
 
 
 ?>"sem_seq","sem_label","sigle","categorie","credit","affectation","utt","profil","resultat"<?php

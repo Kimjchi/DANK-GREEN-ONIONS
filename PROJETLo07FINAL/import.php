@@ -16,18 +16,14 @@ $csv = file_get_contents($filename);
 $csv_lines = preg_split('/\\r\\n|\\r|\\n/', $csv);
 
 
-
-
-
-
-
-
 // on explode les elements du csv en variables
 
 foreach ($csv_lines as $element) {
     list($sem_seq, $sem_label , $sigle, $categorie, $credit, $affectation, $utt, $profil, $resultat)= explode(",", $element);
 
     //On regarde si on a le même label de semestre dans le cursus choisi
+    if (is_numeric($sem_seq )) {
+    
     $sem = array();
     $reponse4 = $BDD->prepare('SELECT `sem_label` FROM `formation` WHERE `idCursus` = ?');
     $reponse4->execute(array($_POST['idCursus']));
